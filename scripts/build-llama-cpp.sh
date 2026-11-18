@@ -20,14 +20,23 @@ for tool in git cmake; do
   command -v "$tool" >/dev/null || { echo "Missing '$tool'. Ubuntu: sudo apt install -y git cmake build-essential  |  macOS: xcode-select --install && brew install cmake"; exit 1; }
 done
 
-if [[ -d "$DIR/.git" ]]; then
+REPO_URL=https://github.com/ggml-org/llama.cpp.git
+REF="${LLAMA_CPP_REF:-}"   # pin a commit (full SHA) or tag, e.g. to compare machines on identical code
+if [[ -n "$REF" ]]; then
+  echo ">> Fetching llama.cpp @ $REF into $DIR"
+  [[ -d "$DIR/.git" ]] || { mkdir -p "$DIR"; git -C "$DIR" init -q; git -C "$DIR" remote add origin "$REPO_URL"; }
+  git -C "$DIR" fetch --depth 1 origin "$REF"
+  git -C "$DIR" checkout -q --detach FETCH_HEAD
+elif [[ -d "$DIR/.git" ]]; then
   echo ">> Updating $DIR"
-  git -C "$DIR" pull --ff-only
+  git -C "$DIR" checkout -q master 2>/dev/null || true
+  git -C "$DIR" pull --ff-only origin master
 else
   echo ">> Cloning llama.cpp into $DIR"
   mkdir -p "$(dirname "$DIR")"
-  git clone --depth 1 https://github.com/ggml-org/llama.cpp.git "$DIR"
+  git clone --depth 1 "$REPO_URL" "$DIR"
 fi
+echo ">> llama.cpp commit: $(git -C "$DIR" rev-parse --short HEAD)"
 
 backend="${BACKEND:-auto}"
 if [[ "$backend" == "auto" ]]; then

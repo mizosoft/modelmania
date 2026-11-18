@@ -13,17 +13,58 @@ ram_gib=0
 vram_gib=0
 gpu_kind="none"
 
+bw_gbs=""     # peak memory bandwidth (GB/s) from the spec table below, if known
+bw_note=""
+
 if [[ "$os" == "Darwin" ]]; then
   cpu="$(sysctl -n machdep.cpu.brand_string 2>/dev/null)"
   cores="$(sysctl -n hw.ncpu)"
+  pcores="$(sysctl -n hw.perflevel0.physicalcpu 2>/dev/null || true)"
+  ecores="$(sysctl -n hw.perflevel1.physicalcpu 2>/dev/null || true)"
   ram_gib=$(( $(sysctl -n hw.memsize) / 1024 / 1024 / 1024 ))
-  echo "== CPU: $cpu ($cores cores)"
-  echo "== RAM: ${ram_gib} GiB"
+  if [[ -n "$pcores" && -n "$ecores" ]]; then
+    echo "== CPU: $cpu ($cores cores: $pcores performance + $ecores efficiency)"
+  else
+    echo "== CPU: $cpu ($cores cores)"
+  fi
+  echo "== RAM: ${ram_gib} GiB (unified: CPU and GPU share it)"
   if [[ "$arch" == "arm64" ]]; then
     gpu_kind="apple"
-    # By default macOS lets the GPU use roughly 2/3 (<=36GB) to 3/4 (>36GB) of RAM.
-    if (( ram_gib > 36 )); then vram_gib=$(( ram_gib * 3 / 4 )); else vram_gib=$(( ram_gib * 2 / 3 )); fi
-    echo "== GPU: Apple Silicon, unified memory (~${vram_gib} GiB usable by the GPU by default)"
+    gpu_cores="$(system_profiler SPDisplaysDataType 2>/dev/null | awk -F': ' '/Total Number of Cores/{print $2; exit}')"
+    # The GPU may only wire part of RAM. Default (iogpu.wired_limit_mb=0): about
+    # 2/3 of RAM up to 36 GB, 3/4 above. llama.cpp prints the exact figure at load
+    # time as "recommendedMaxWorkingSetSize". You can raise it until reboot with
+    #   sudo sysctl iogpu.wired_limit_mb=<MiB>
+    wired_mb="$(sysctl -n iogpu.wired_limit_mb 2>/dev/null || echo 0)"
+    server="$(command -v llama-server || echo "$(cd "$(dirname "$0")/.." && pwd)/vendor/llama.cpp/build/bin/llama-server")"
+    mtl_mib=""
+    [[ -x "$server" ]] && mtl_mib="$("$server" --list-devices 2>&1 | sed -nE 's/^ *MTL0: .*\(([0-9]+) MiB,.*/\1/p' | head -1)"
+    if [[ -n "$mtl_mib" ]]; then
+      vram_gib=$(( mtl_mib / 1024 )); vram_src="$mtl_mib MiB, measured by llama.cpp (Metal recommendedMaxWorkingSetSize)"
+    elif (( wired_mb > 0 )); then
+      vram_gib=$(( wired_mb / 1024 )); vram_src="iogpu.wired_limit_mb=$wired_mb (set by you)"
+    else
+      # Rough estimate. Measured: 74% on a 24 GB M4 Pro (macOS 26); older macOS used ~2/3.
+      if (( ram_gib > 36 )); then vram_gib=$(( ram_gib * 3 / 4 )); else vram_gib=$(( ram_gib * 2 / 3 )); fi
+      vram_src="estimate; build llama.cpp for the exact figure"
+    fi
+    vram_src+="; raise with: sudo sysctl iogpu.wired_limit_mb=<MiB>"
+    echo "== GPU: Apple Silicon${gpu_cores:+, $gpu_cores GPU cores}, Metal backend"
+    echo "   usable by the GPU: ~${vram_gib} GiB of ${ram_gib} GiB ($vram_src)"
+    # Peak bandwidth, Apple spec sheets. Binned Max chips have less (fewer memory channels).
+    case "$cpu" in
+      "Apple M1")       bw_gbs=68 ;;   "Apple M1 Pro")  bw_gbs=200 ;;
+      "Apple M1 Max")   bw_gbs=400 ;;  "Apple M1 Ultra") bw_gbs=800 ;;
+      "Apple M2")       bw_gbs=100 ;;  "Apple M2 Pro")  bw_gbs=200 ;;
+      "Apple M2 Max")   bw_gbs=400 ;;  "Apple M2 Ultra") bw_gbs=800 ;;
+      "Apple M3")       bw_gbs=100 ;;  "Apple M3 Pro")  bw_gbs=150 ;;
+      "Apple M3 Max")   if [[ "${gpu_cores:-0}" -ge 40 ]]; then bw_gbs=400; else bw_gbs=300; fi ;;
+      "Apple M3 Ultra") bw_gbs=819 ;;
+      "Apple M4")       bw_gbs=120 ;;  "Apple M4 Pro")  bw_gbs=273 ;;
+      "Apple M4 Max")   if [[ "${gpu_cores:-0}" -ge 40 ]]; then bw_gbs=546; else bw_gbs=410; fi ;;
+      "Apple M5")       bw_gbs=153 ;;
+    esac
+    [[ -n "$bw_gbs" ]] && bw_note="Apple spec sheet for $cpu${gpu_cores:+ ($gpu_cores-core GPU)}"
   fi
 else
   cpu="$(grep -m1 'model name' /proc/cpuinfo | cut -d: -f2- | sed 's/^ //')"
@@ -45,6 +86,14 @@ else
     nvidia-smi --query-gpu=name,memory.total,driver_version --format=csv,noheader | sed 's/^/   /'
     vram_mib=$(nvidia-smi --query-gpu=memory.total --format=csv,noheader,nounits | sort -n | tail -1)
     vram_gib=$(( vram_mib / 1024 ))
+    gname="$(nvidia-smi --query-gpu=name --format=csv,noheader | head -1)"
+    case "$gname" in   # peak GB/s, NVIDIA spec sheets (same as docs/01)
+      *"RTX 5090"*) bw_gbs=1792 ;; *"RTX 4090"*) bw_gbs=1008 ;; *"RTX 3090"*) bw_gbs=936 ;;
+      *"RTX 4070"*) bw_gbs=504 ;;  *"4060 Ti"*) bw_gbs=288 ;;  *"RTX 3060"*) bw_gbs=360 ;;
+      *L40S*) bw_gbs=864 ;; *L4*) bw_gbs=300 ;; *A100*80GB*) bw_gbs=2039 ;;
+      *H100*) bw_gbs=3350 ;; *H200*) bw_gbs=4800 ;;
+    esac
+    [[ -n "$bw_gbs" ]] && bw_note="spec sheet for $gname"
   elif command -v rocm-smi >/dev/null 2>&1; then
     gpu_kind="amd"
     echo "== GPU (AMD/ROCm):"
@@ -62,6 +111,18 @@ fi
 
 disk_free=$(df -h . | awk 'NR==2{print $4}')
 echo "== Free disk here: $disk_free (each model is 0.5-20 GB)"
+if [[ -n "$bw_gbs" ]]; then
+  echo "== Peak memory bandwidth: ${bw_gbs} GB/s ($bw_note; real decode reaches ~60-80%)"
+else
+  echo "== Peak memory bandwidth: unknown. Look up your chip/RAM in docs/01 (bandwidth cheat sheet)"
+fi
+py_ok="$(python3 -c 'import sys; print(int(sys.version_info >= (3, 10)))' 2>/dev/null || echo 0)"
+if [[ "$py_ok" != 1 ]]; then
+  echo "== Python: '$(command -v python3 || echo none)' is $(python3 -V 2>&1 | cut -d' ' -f2); labs want 3.10+"
+  for p in python3.14 python3.13 python3.12 python3.11 python3.10; do
+    command -v "$p" >/dev/null && { echo "   found $(command -v "$p"): use it, e.g. $p -m venv .venv"; break; }
+  done
+fi
 
 echo
 echo "================ Recommendation ================"
