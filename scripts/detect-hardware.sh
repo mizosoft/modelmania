@@ -116,10 +116,10 @@ if [[ -n "$bw_gbs" ]]; then
 else
   echo "== Peak memory bandwidth: unknown. Look up your chip/RAM in docs/01 (bandwidth cheat sheet)"
 fi
-py_ok="$(python3 -c 'import sys; print(int(sys.version_info >= (3, 10)))' 2>/dev/null || echo 0)"
+py_ok="$(python3 -c 'import sys; print(int(sys.version_info >= (3, 9)))' 2>/dev/null || echo 0)"
 if [[ "$py_ok" != 1 ]]; then
-  echo "== Python: '$(command -v python3 || echo none)' is $(python3 -V 2>&1 | cut -d' ' -f2); labs want 3.10+"
-  for p in python3.14 python3.13 python3.12 python3.11 python3.10; do
+  echo "== Python: '$(command -v python3 || echo none)' is $(python3 -V 2>&1 | cut -d' ' -f2); labs want 3.9+"
+  for p in python3.14 python3.13 python3.12 python3.11 python3.10 python3.9; do
     command -v "$p" >/dev/null && { echo "   found $(command -v "$p"): use it, e.g. $p -m venv .venv"; break; }
   done
 fi
@@ -149,7 +149,7 @@ elif (( budget < 8 )); then
 elif (( budget < 14 )); then
   tier="T2"; pick="Qwen3.5-9B (Q4_K_M/Q6_K), Gemma 4 E4B, gpt-oss-20b if >=12 GiB"
 elif (( budget < 22 )); then
-  tier="T3"; pick="gpt-oss-20b (MXFP4), Gemma 4 12B (QAT), Qwen3.5-9B (Q8_0)"
+  tier="T3"; pick="gpt-oss-20b (MXFP4); Qwen3.8-27B UD-IQ4_XS if >=16 GiB; Gemma 4 26B-A4B (MXFP4, tight)"
 elif (( budget < 40 )); then
   tier="T4"; pick="Qwen3.8-27B / Qwen3.6-27B (Q4), Gemma 4 26B-A4B or 31B (Q4), Qwen3.6-35B-A3B"
 else

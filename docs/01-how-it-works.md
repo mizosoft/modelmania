@@ -68,7 +68,7 @@ Two phases with very different performance:
 | **Decode** (text generation, "tg") | one token at a time; *every weight is read once per token* | **memory bandwidth** | generated tokens/s |
 
 That's why on any machine prefill is many times faster than decode (e.g. 139
-vs 11 tokens/s on the reference CPU), and why a long pasted document makes you
+vs 11 tokens/s on the reference CPU, 1,335 vs 66 on an M4 Pro GPU), and why a long pasted document makes you
 wait before the first word appears.
 
 ### The speed rule of thumb
@@ -82,9 +82,12 @@ For a dense model, the bytes read per token are roughly the model file size. Exa
 - the same model on a dual-channel DDR5 laptop (~70 GB/s usable) → ≈ 12 tok/s
 - the same model on an RTX 4090 (1008 GB/s) → ≈ 175 tok/s
 
-Real numbers land at 50-90% of the ceiling. On machines with **few CPU cores**
+Real numbers land at 50-90% of the ceiling. Measured on an M4 Pro (Metal), every
+model from 4B to 27B reached **64-76%** of its 273 GB/s, so ~190 GB/s ÷ bytes per token
+predicted each one within ~10%. On machines with **few CPU cores**
 you can be compute-bound before you're bandwidth-bound. The reference 4-core
-VM shows this: the dequantization work in `Q4_K_M` made it slower than `Q4_0`.
+VM shows this: the dequantization work in `Q4_K_M` made it slower than `Q4_0`
+(+56% for Q4_0). On the M4 Pro's GPU the gap was just the 6% size difference (+9%).
 
 ### Sampling
 
@@ -112,7 +115,7 @@ memory  ≈  weights  +  KV cache  +  overhead (compute buffers, ~0.2-1 GB)
 | Q6_K | 6.6 | 6.6 GB | near-lossless |
 | Q5_K_M | 5.7 | 5.7 GB | very good |
 | **Q4_K_M** | ~4.8-5.2 | ~5 GB | **the usual sweet spot** |
-| Q4_0 / IQ4_XS / MXFP4 | ~4.3-4.5 | ~4.5 GB | close to Q4_K_M; Q4_0 has very fast CPU/ARM kernels |
+| Q4_0 / IQ4_XS / MXFP4 | ~4.3-4.5 | ~4.5 GB | close to Q4_K_M; Q4_0 has very fast CPU kernels (on a GPU it's only as fast as its size) |
 | Q3_K_M / IQ3 | ~3.5-3.9 | ~3.7 GB | noticeable loss |
 | Q2_K / IQ2 | ~2.5-3 | ~2.8 GB | large loss; only for huge models that won't fit otherwise |
 
@@ -157,6 +160,8 @@ An MoE layer has many "expert" sub-networks and a router that picks a few per to
 active parameters** (only those are read per token). So MoE is the best friend
 of CPUs and Macs, which have lots of memory but modest bandwidth. Measured on the
 reference VM: gpt-oss-20b (11.3 GB) generated *faster* than the dense Qwen3.5-9B (5.3 GB).
+On an M4 Pro: gpt-oss-20b ran at 81 tok/s, the dense Qwen3.8-27B (13.4 GB, a similar file
+size) at 14 tok/s, and even the 2.4 GB Qwen3.5-4B only at 69.
 
 With a GPU that's too small, llama.cpp can keep the attention layers on the GPU
 and push the experts to the CPU (`--n-cpu-moe N`). That's often the best way to
@@ -167,7 +172,7 @@ run a big MoE on a 12-24 GB card.
 Gemma's "E" models have large **per-layer embedding** tables that are only
 *looked up*, not multiplied, for each token. The E4B file is 4.8 GB (7.5B weights
 in total), but it runs like a ~4B model. Measured: 11.4 tok/s, the same as a
-2.4 GB Qwen3.5-4B at Q4_0.
+2.4 GB Qwen3.5-4B at Q4_0 (M4 Pro: 66 vs 69 tok/s). It reads ~2.6 GiB per token.
 
 ---
 
@@ -212,6 +217,8 @@ Approximate peak specs. Real-world use is about 60-90% of these.
 | DDR4-3200 dual channel | 51 | | RTX 3060 12 GB | 360 |
 | DDR5-5600 dual channel | 90 | | RTX 4060 Ti 16 GB | 288 |
 | Apple M1 / M2 / M3 | 68 / 100 / 100 | | RTX 4070 12 GB | 504 |
+| Apple M1 Pro / M2 Pro / M3 Pro | 200 / 200 / 150 | | RTX 4080 16 GB | 717 |
+| Apple M1 Max / M2 Max / M3 Max | 400 / 400 / 300-400 | | RX 7900 XTX 24 GB | 960 |
 | Apple M4 / M5 | 120 / 153 | | RTX 3090 / 4090 (24 GB) | 936 / 1008 |
 | Apple M4 Pro | 273 | | RTX 5090 (32 GB) | 1792 |
 | Apple M4 Max | 410-546 | | L4 (24 GB) | 300 |
@@ -219,8 +226,12 @@ Approximate peak specs. Real-world use is about 60-90% of these.
 | Ryzen AI Max+ 395 (128 GB) | 256 | | A100 80 GB | 2039 |
 | DGX Spark / GB10 (128 GB) | 273 | | H100 SXM 80 GB / H200 141 GB | 3350 / 4800 |
 
-The reference VM for this repo (4 vCPUs of a Xeon server) achieved an *effective*
-~20-30 GB/s, which is laptop-class.
+Binned chips (fewer GPU cores) can have less: the M3 Max with a 30-core GPU has 300,
+the M4 Max with a 32-core GPU has 410. `scripts/detect-hardware.sh` and `tools/mmbench.py`
+look your chip up in this table.
+
+Measured: the reference VM (4 vCPUs of a Xeon server) achieved an *effective*
+~26-32 GB/s, which is laptop-class. The M4 Pro laptop achieved 178-208 GB/s (65-76% of 273).
 
 ---
 

@@ -24,7 +24,8 @@ still work, but have been overtaken at every size. Use them only for comparison.
 ## By hardware tier
 
 The **memory budget** is VRAM (GPU), about ⅔-¾ of RAM (Apple Silicon unified
-memory), or RAM minus ~4 GB (CPU-only). `scripts/detect-hardware.sh` computes it.
+memory: measured 17.8 GiB = 74% on a 24 GB M4 Pro with macOS 26), or RAM minus ~4 GB
+(CPU-only). `scripts/detect-hardware.sh` computes it, asking llama.cpp for the exact Metal figure.
 Leave room for the KV cache. `tools/memcalc.py` tells you exactly how much.
 
 | Tier | Budget | Typical machine | Start with | Also try |
@@ -32,12 +33,15 @@ Leave room for the KV cache. `tools/memcalc.py` tells you exactly how much.
 | **T0** | < 4 GB | old laptop, Raspberry Pi 5, 4 GB GPU | Qwen3.5-2B Q4_K_M (1.3 GB) | Qwen3.5-0.8B (0.5 GB) |
 | **T1** | 4-8 GB | 8 GB laptop / Mac, 6-8 GB GPU | Qwen3.5-4B Q4_0 (2.6 GB) | Gemma 4 E4B QAT (5.2 GB), Gemma 4 E2B (3 GB) |
 | **T2** | 8-14 GB | 16 GB laptop/Mac, 12 GB GPU | Gemma 4 E4B QAT (5.2 GB) + Qwen3.5-9B Q4_K_M (5.7 GB) | Gemma 4 12B QAT (7 GB); gpt-oss-20b (12.1 GB) if ≥ 12 GB free |
-| **T3** | 14-22 GB | 16 GB GPU, 24 GB Mac, 32 GB RAM PC | **gpt-oss-20b** (12.1 GB) | Gemma 4 26B-A4B MXFP4 (16.6 GB), Qwen3.5-9B Q8_0 |
+| **T3** | 14-22 GB | 16 GB GPU, 24 GB Mac, 32 GB RAM PC | **gpt-oss-20b** (12.1 GB) | Qwen3.8-27B UD-IQ4_XS (14.4 GB, if ≥ 16 GiB), Gemma 4 26B-A4B MXFP4 (16.6 GB, tight), Qwen3.5-9B Q8_0 |
 | **T4** | 22-40 GB | RTX 3090/4090/5090, 36-48 GB Mac, 64 GB RAM PC | **Qwen3.8-27B** Q4_K_M (16.6 GB) | Qwen3.6-35B-A3B (22 GB), Gemma 4 31B Q4 (18 GB), Devstral Small 2 |
 | **T5** | 40+ GB | 64-128 GB Mac, Strix Halo, DGX Spark, 2 GPUs, cloud 80 GB | gpt-oss-120b (63 GB) | Qwen3.5-122B-A10B (75 GB), 27B-35B models at Q8 |
 
 **CPU-only or modest-bandwidth machines: prefer MoE** (gpt-oss-20b, Gemma 4 26B-A4B,
-Qwen3.6-35B-A3B). They read only 3-4B parameters per token.
+Qwen3.6-35B-A3B). They read only 3-4B parameters per token. That holds on a Mac too: on
+an M4 Pro, gpt-oss-20b generated 81 tok/s, against 14 for the dense Qwen3.8-27B. The dense 27B was
+still the better non-reasoning model (21/24 vs 18/24 for the 4B models), and 14 tok/s is
+fine for reading. See [docs/05](05-measurements.md).
 **Discrete GPU: prefer models that fit entirely in VRAM.** Spilling to system RAM
 cuts speed by roughly the ratio of the two bandwidths. The exception is MoE with
 `--n-cpu-moe`.
@@ -59,9 +63,10 @@ cuts speed by roughly the ratio of the two bandwidths. The exception is MoE with
 1. Find a GGUF repo: the **official** one (Google ships `*-qat-q4_0-gguf`,
    Qwen ships some `-GGUF` repos), **ggml-org** (made by the llama.cpp team),
    **unsloth** or **bartowski**. These are the reliable quantizers.
-2. Start at **Q4_K_M** (or the official **QAT Q4_0**). On CPU/ARM, also try
+2. Start at **Q4_K_M** (or the official **QAT Q4_0**). **CPU-only**: also try
    **Q4_0**, which has the fastest kernels. On the reference VM it was 56% faster
-   with the same perplexity.
+   with the same perplexity. **GPU / Apple Metal**: the kernel advantage disappears.
+   On an M4 Pro, Q4_0 was only 9% faster (its file is 6% smaller), so choose by quality and size.
 3. If it fits with room to spare, step up to Q5_K_M, Q6_K or Q8_0. If it doesn't
    fit, try IQ4_XS or a smaller model. Don't go below Q3 unless the model is huge (70B+).
 4. Vision? Also download the repo's `mmproj-*.gguf` (`llama serve -hf` does this

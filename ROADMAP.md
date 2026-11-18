@@ -42,7 +42,7 @@ Reference docs you'll keep coming back to:
    - `curl -LsSf https://llama.app/install.sh | sh`. This is the official installer and gives you the `llama` command. Read the script first if you like.
    - `brew install llama.cpp` (macOS/Linux), `winget install llama.cpp` (Windows)
    - `scripts/build-llama-cpp.sh` compiles from source and auto-picks CUDA, Metal, ROCm, Vulkan or CPU. It's the best way to learn what the backends are.
-3. Python 3.10+ (labs use only the standard library). Optional: `pip install gguf` for `tools/memcalc.py`.
+3. Python 3.9+ (labs use only the standard library). Optional: `pip install gguf` for `tools/memcalc.py`.
 
 **Done when**
 - [ ] `llama-server --version` (or `llama version`) prints a version
@@ -144,7 +144,9 @@ will run, and then confirm it by measuring. This is the core skill. Read
 
 > On this repo's reference machine (4 CPU cores, no GPU) these experiments produced
 > some counter-intuitive results: the 21B MoE model was faster *and* smarter than
-> the 9B dense one, and `Q4_0` beat `Q4_K_M` on speed with the same quality. See
+> the 9B dense one, and `Q4_0` beat `Q4_K_M` on speed with the same quality. On an
+> M4 Pro Mac the MoE result held (gpt-oss-20b was the fastest model of all), but the
+> Q4_0 advantage shrank to its 6% size difference, because that one was a CPU-kernel effect. See
 > [docs/05-measurements.md](docs/05-measurements.md).
 
 **Done when**
