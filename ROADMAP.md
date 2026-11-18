@@ -129,6 +129,18 @@ will run, and then confirm it by measuring. This is the core skill. Read
 7. MoE vs dense: benchmark a ~9B dense model against `gpt-oss-20b`. Which is faster, and why?
 8. Thinking: `python3 labs/03_mini_eval.py` then `python3 labs/03_mini_eval.py --think`.
    Compare score and time.
+9. **Put your machine on the map**: `tools/mmbench.py` runs a pinned model set with
+   fixed settings (pp512/tg128, temperature 0, thinking off), runs the mini-eval
+   against a server it starts and stops itself, and writes `results/<machine-id>-<date>.json`.
+   It works the same on macOS, Linux and Windows:
+   ```bash
+   python3 tools/mmbench.py --list                # fingerprint + which tiers fit
+   python3 tools/mmbench.py --download            # fetch the pinned files, run what fits
+   python3 tools/mmbench.py --compare             # your machine vs every other result
+   ```
+   Look at the **% of peak** column: decode t/s × bytes per token ÷ peak bandwidth.
+   That number lets you compare a laptop with a GPU on equal terms. Below ~50%
+   means something other than memory is the limit (few cores, dequant work, layers off the GPU).
 
 > On this repo's reference machine (4 CPU cores, no GPU) these experiments produced
 > some counter-intuitive results: the 21B MoE model was faster *and* smarter than
@@ -138,6 +150,7 @@ will run, and then confirm it by measuring. This is the core skill. Read
 **Done when**
 - [ ] you can estimate a model's RAM/VRAM need in your head (params × bits ÷ 8 + KV)
 - [ ] your speed predictions land within ~2× of the measurement
+- [ ] you have an mmbench result for your machine, and know its % of peak bandwidth
 - [ ] you can explain why a 20B MoE can beat a 9B dense model on speed
 - [ ] you can explain what `Q4_K_M` means and when you'd pick `Q8_0` instead
 
