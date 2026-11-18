@@ -71,7 +71,7 @@ MODELS = [
      "repo": "unsloth/Qwen3.8-27B-GGUF", "rev": "4af51b3542f775b0a8e4b310bfb3f17e01c306c9",
      "file": "Qwen3.8-27B-UD-IQ4_XS.gguf", "size": 14352911264,
      "sha256": "4b194b34ecec99fdfb74caef84445ccd01c987de87d96ae8ca50dc434b4b0a38",
-     "read_bytes": None, "eval": {"think": False, "max_tokens": 256}},
+     "read_bytes": 13444601856, "eval": {"think": False, "max_tokens": 256}},
 ]
 TIERS = ["base", "small", "medium", "large"]
 # memory needed on top of the file: KV cache at 4K context + compute buffers

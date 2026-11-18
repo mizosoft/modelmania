@@ -1,0 +1,1103 @@
+{
+ "mmbench": 1,
+ "date": "2026-11-19",
+ "fingerprint": {
+  "machine_id": "apple-m4-pro-20gpu-24gb-metal",
+  "os": "macOS 26.6.2 (arm64)",
+  "cpu": "Apple M4 Pro",
+  "logical_cores": 14,
+  "physical_cores": 14,
+  "perf_cores": 10,
+  "ram_gib": 24.0,
+  "gpus": [
+   {
+    "name": "Apple M4 Pro",
+    "vram_gib": 17.76,
+    "gpu_cores": 20
+   }
+  ],
+  "backend": "Metal",
+  "llama_cpp": {
+   "version": "1.0.0-dev",
+   "build": "1",
+   "commit": "a300a9c",
+   "built_with": "AppleClang 21.0.0.21000101 for Darwin arm64"
+  },
+  "peak_bandwidth_gbs": 273.0,
+  "bandwidth_source": "Apple spec sheet (M4 Pro, 20-core GPU)",
+  "threads": 10,
+  "python": "3.13.7"
+ },
+ "settings": {
+  "n_prompt": 512,
+  "n_gen": 128,
+  "eval_ctx": 4096,
+  "temperature": 0,
+  "thinking": "off (gpt-oss: reasoning_effort=low)",
+  "set_version": "2026-11"
+ },
+ "models": {
+  "qwen3.5-4b-q4_0": {
+   "repo": "unsloth/Qwen3.5-4B-GGUF",
+   "rev": "e87f176479d0855a907a41277aca2f8ee7a09523",
+   "file": "Qwen3.5-4B-Q4_0.gguf",
+   "size": 2583221408,
+   "tier": "base",
+   "read_bytes_per_token": 2572253184,
+   "read_bytes_source": "gguf (memcalc)",
+   "bench": {
+    "cmd": "llama-bench -m Qwen3.5-4B-Q4_0.gguf -p 512 -n 128 -t 10 -r 3 -o json",
+    "pp": {
+     "tokens_per_s": 830.47,
+     "stddev": 0.73,
+     "samples": [
+      830.25,
+      829.88,
+      831.28
+     ]
+    },
+    "tg": {
+     "tokens_per_s": 69.11,
+     "stddev": 0.04,
+     "samples": [
+      69.07,
+      69.11,
+      69.15
+     ]
+    },
+    "build_commit": "a300a9c",
+    "build_number": 1,
+    "backends": "MTL,BLAS",
+    "devices": "auto",
+    "cpu_info": "Accelerate, Apple M4 Pro",
+    "gpu_info": "Apple M4 Pro",
+    "n_cpu_moe": 0,
+    "n_gpu_layers": -1,
+    "flash_attn": -1,
+    "n_batch": 2048,
+    "n_ubatch": 512,
+    "n_threads": 10,
+    "type_k": "f16",
+    "type_v": "f16",
+    "model_type": "qwen35 4B Q4_0",
+    "model_size": 2572253184,
+    "model_n_params": 4205751296
+   },
+   "effective_gbs": 177.8,
+   "ceiling_tokens_per_s": 106.1,
+   "bandwidth_efficiency": 0.651,
+   "eval": {
+    "score": 18,
+    "n": 24,
+    "categories": {
+     "math": "3/4",
+     "reasoning": "4/6",
+     "knowledge": "4/4",
+     "instructions": "3/4",
+     "code": "1/3",
+     "extraction": "2/2",
+     "multilingual": "1/1"
+    },
+    "total_s": 3.5,
+    "server_load_s": 1.0,
+    "params": {
+     "temperature": 0,
+     "max_tokens": 256,
+     "chat_template_kwargs": {
+      "enable_thinking": false
+     }
+    },
+    "rows": [
+     {
+      "id": "math-1",
+      "cat": "math",
+      "ok": true,
+      "answer": "12",
+      "seconds": 0.2,
+      "completion_tokens": 3
+     },
+     {
+      "id": "math-2",
+      "cat": "math",
+      "ok": true,
+      "answer": "1081",
+      "seconds": 0.14,
+      "completion_tokens": 5
+     },
+     {
+      "id": "math-3",
+      "cat": "math",
+      "ok": true,
+      "answer": "155",
+      "seconds": 0.15,
+      "completion_tokens": 4
+     },
+     {
+      "id": "math-4",
+      "cat": "math",
+      "ok": false,
+      "answer": "3",
+      "seconds": 0.12,
+      "completion_tokens": 2
+     },
+     {
+      "id": "reason-1",
+      "cat": "reasoning",
+      "ok": true,
+      "answer": "Carol",
+      "seconds": 0.1,
+      "completion_tokens": 2
+     },
+     {
+      "id": "reason-2",
+      "cat": "reasoning",
+      "ok": false,
+      "answer": "11",
+      "seconds": 0.14,
+      "completion_tokens": 3
+     },
+     {
+      "id": "reason-3",
+      "cat": "reasoning",
+      "ok": false,
+      "answer": "Tuesday",
+      "seconds": 0.13,
+      "completion_tokens": 2
+     },
+     {
+      "id": "reason-4",
+      "cat": "reasoning",
+      "ok": true,
+      "answer": "5",
+      "seconds": 0.13,
+      "completion_tokens": 2
+     },
+     {
+      "id": "reason-5",
+      "cat": "reasoning",
+      "ok": true,
+      "answer": "5",
+      "seconds": 0.13,
+      "completion_tokens": 2
+     },
+     {
+      "id": "reason-6",
+      "cat": "reasoning",
+      "ok": true,
+      "answer": "3",
+      "seconds": 0.1,
+      "completion_tokens": 2
+     },
+     {
+      "id": "know-1",
+      "cat": "knowledge",
+      "ok": true,
+      "answer": "Na",
+      "seconds": 0.1,
+      "completion_tokens": 2
+     },
+     {
+      "id": "know-2",
+      "cat": "knowledge",
+      "ok": true,
+      "answer": "1969",
+      "seconds": 0.14,
+      "completion_tokens": 5
+     },
+     {
+      "id": "know-3",
+      "cat": "knowledge",
+      "ok": true,
+      "answer": "Pacific Ocean",
+      "seconds": 0.11,
+      "completion_tokens": 3
+     },
+     {
+      "id": "know-4",
+      "cat": "knowledge",
+      "ok": true,
+      "answer": "Gabriel Garc\u00eda M\u00e1rquez",
+      "seconds": 0.16,
+      "completion_tokens": 6
+     },
+     {
+      "id": "instr-1",
+      "cat": "instructions",
+      "ok": true,
+      "answer": "red, green, blue",
+      "seconds": 0.16,
+      "completion_tokens": 6
+     },
+     {
+      "id": "instr-2",
+      "cat": "instructions",
+      "ok": true,
+      "answer": "ananab",
+      "seconds": 0.11,
+      "completion_tokens": 3
+     },
+     {
+      "id": "instr-3",
+      "cat": "instructions",
+      "ok": false,
+      "answer": "Cats are wonderful pets.",
+      "seconds": 0.17,
+      "completion_tokens": 7
+     },
+     {
+      "id": "instr-4",
+      "cat": "instructions",
+      "ok": true,
+      "answer": "{\"city\": \"Paris\", \"country\": \"France\"}",
+      "seconds": 0.29,
+      "completion_tokens": 13
+     },
+     {
+      "id": "code-1",
+      "cat": "code",
+      "ok": false,
+      "answer": "30",
+      "seconds": 0.14,
+      "completion_tokens": 3
+     },
+     {
+      "id": "code-2",
+      "cat": "code",
+      "ok": true,
+      "answer": "4",
+      "seconds": 0.13,
+      "completion_tokens": 2
+     },
+     {
+      "id": "code-3",
+      "cat": "code",
+      "ok": false,
+      "answer": "[1,9,10]",
+      "seconds": 0.23,
+      "completion_tokens": 9
+     },
+     {
+      "id": "extract-1",
+      "cat": "extraction",
+      "ok": true,
+      "answer": "44.82",
+      "seconds": 0.19,
+      "completion_tokens": 6
+     },
+     {
+      "id": "extract-2",
+      "cat": "extraction",
+      "ok": true,
+      "answer": "Thursday",
+      "seconds": 0.13,
+      "completion_tokens": 2
+     },
+     {
+      "id": "lang-1",
+      "cat": "multilingual",
+      "ok": true,
+      "answer": "Muchas gracias",
+      "seconds": 0.13,
+      "completion_tokens": 4
+     }
+    ]
+   }
+  },
+  "gemma-4-e4b-qat-q4_0": {
+   "repo": "google/gemma-4-E4B-it-qat-q4_0-gguf",
+   "rev": "4b4a2c1d584be7264f87aac328a1bc739ce81b6c",
+   "file": "gemma-4-E4B_q4_0-it.gguf",
+   "size": 5154941280,
+   "tier": "small",
+   "read_bytes_per_token": 2827007144,
+   "read_bytes_source": "gguf (memcalc)",
+   "bench": {
+    "cmd": "llama-bench -m gemma-4-E4B_q4_0-it.gguf -p 512 -n 128 -t 10 -r 3 -o json",
+    "pp": {
+     "tokens_per_s": 1335.06,
+     "stddev": 2.54,
+     "samples": [
+      1335.08,
+      1332.51,
+      1337.59
+     ]
+    },
+    "tg": {
+     "tokens_per_s": 66.1,
+     "stddev": 0.62,
+     "samples": [
+      65.39,
+      66.4,
+      66.52
+     ]
+    },
+    "build_commit": "a300a9c",
+    "build_number": 1,
+    "backends": "MTL,BLAS",
+    "devices": "auto",
+    "cpu_info": "Accelerate, Apple M4 Pro",
+    "gpu_info": "Apple M4 Pro",
+    "n_cpu_moe": 0,
+    "n_gpu_layers": -1,
+    "flash_attn": -1,
+    "n_batch": 2048,
+    "n_ubatch": 512,
+    "n_threads": 10,
+    "type_k": "f16",
+    "type_v": "f16",
+    "model_type": "gemma4 E4B Q4_0",
+    "model_size": 5139117224,
+    "model_n_params": 7463013674
+   },
+   "effective_gbs": 186.9,
+   "ceiling_tokens_per_s": 96.6,
+   "bandwidth_efficiency": 0.685,
+   "eval": {
+    "score": 18,
+    "n": 24,
+    "categories": {
+     "math": "3/4",
+     "reasoning": "4/6",
+     "knowledge": "4/4",
+     "instructions": "3/4",
+     "code": "1/3",
+     "extraction": "2/2",
+     "multilingual": "1/1"
+    },
+    "total_s": 2.9,
+    "server_load_s": 1.0,
+    "params": {
+     "temperature": 0,
+     "max_tokens": 256,
+     "chat_template_kwargs": {
+      "enable_thinking": false
+     }
+    },
+    "rows": [
+     {
+      "id": "math-1",
+      "cat": "math",
+      "ok": true,
+      "answer": "12",
+      "seconds": 0.16,
+      "completion_tokens": 3
+     },
+     {
+      "id": "math-2",
+      "cat": "math",
+      "ok": true,
+      "answer": "1081",
+      "seconds": 0.13,
+      "completion_tokens": 5
+     },
+     {
+      "id": "math-3",
+      "cat": "math",
+      "ok": true,
+      "answer": "155",
+      "seconds": 0.13,
+      "completion_tokens": 4
+     },
+     {
+      "id": "math-4",
+      "cat": "math",
+      "ok": false,
+      "answer": "6",
+      "seconds": 0.08,
+      "completion_tokens": 2
+     },
+     {
+      "id": "reason-1",
+      "cat": "reasoning",
+      "ok": true,
+      "answer": "Carol",
+      "seconds": 0.08,
+      "completion_tokens": 2
+     },
+     {
+      "id": "reason-2",
+      "cat": "reasoning",
+      "ok": false,
+      "answer": "13",
+      "seconds": 0.11,
+      "completion_tokens": 3
+     },
+     {
+      "id": "reason-3",
+      "cat": "reasoning",
+      "ok": true,
+      "answer": "Saturday",
+      "seconds": 0.07,
+      "completion_tokens": 2
+     },
+     {
+      "id": "reason-4",
+      "cat": "reasoning",
+      "ok": true,
+      "answer": "5",
+      "seconds": 0.09,
+      "completion_tokens": 2
+     },
+     {
+      "id": "reason-5",
+      "cat": "reasoning",
+      "ok": true,
+      "answer": "5",
+      "seconds": 0.09,
+      "completion_tokens": 2
+     },
+     {
+      "id": "reason-6",
+      "cat": "reasoning",
+      "ok": false,
+      "answer": "2",
+      "seconds": 0.07,
+      "completion_tokens": 2
+     },
+     {
+      "id": "know-1",
+      "cat": "knowledge",
+      "ok": true,
+      "answer": "Na",
+      "seconds": 0.07,
+      "completion_tokens": 2
+     },
+     {
+      "id": "know-2",
+      "cat": "knowledge",
+      "ok": true,
+      "answer": "1969",
+      "seconds": 0.12,
+      "completion_tokens": 5
+     },
+     {
+      "id": "know-3",
+      "cat": "knowledge",
+      "ok": true,
+      "answer": "Pacific Ocean",
+      "seconds": 0.09,
+      "completion_tokens": 3
+     },
+     {
+      "id": "know-4",
+      "cat": "knowledge",
+      "ok": true,
+      "answer": "Gabriel Garc\u00eda M\u00e1rquez",
+      "seconds": 0.11,
+      "completion_tokens": 4
+     },
+     {
+      "id": "instr-1",
+      "cat": "instructions",
+      "ok": true,
+      "answer": "red, green, blue",
+      "seconds": 0.14,
+      "completion_tokens": 6
+     },
+     {
+      "id": "instr-2",
+      "cat": "instructions",
+      "ok": true,
+      "answer": "ananab",
+      "seconds": 0.09,
+      "completion_tokens": 3
+     },
+     {
+      "id": "instr-3",
+      "cat": "instructions",
+      "ok": false,
+      "answer": "Cats nap all day.",
+      "seconds": 0.14,
+      "completion_tokens": 6
+     },
+     {
+      "id": "instr-4",
+      "cat": "instructions",
+      "ok": true,
+      "answer": "{\n\"city\": \"Paris\",\n\"country\": \"France\"\n}",
+      "seconds": 0.32,
+      "completion_tokens": 18
+     },
+     {
+      "id": "code-1",
+      "cat": "code",
+      "ok": false,
+      "answer": "30",
+      "seconds": 0.11,
+      "completion_tokens": 3
+     },
+     {
+      "id": "code-2",
+      "cat": "code",
+      "ok": true,
+      "answer": "4",
+      "seconds": 0.09,
+      "completion_tokens": 2
+     },
+     {
+      "id": "code-3",
+      "cat": "code",
+      "ok": false,
+      "answer": "[ 1, 9, 10 ]",
+      "seconds": 0.25,
+      "completion_tokens": 12
+     },
+     {
+      "id": "extract-1",
+      "cat": "extraction",
+      "ok": true,
+      "answer": "44.82",
+      "seconds": 0.15,
+      "completion_tokens": 6
+     },
+     {
+      "id": "extract-2",
+      "cat": "extraction",
+      "ok": true,
+      "answer": "Thursday",
+      "seconds": 0.09,
+      "completion_tokens": 2
+     },
+     {
+      "id": "lang-1",
+      "cat": "multilingual",
+      "ok": true,
+      "answer": "Muchas gracias",
+      "seconds": 0.09,
+      "completion_tokens": 3
+     }
+    ]
+   }
+  },
+  "gpt-oss-20b-mxfp4": {
+   "repo": "ggml-org/gpt-oss-20b-GGUF",
+   "rev": "41e8a94d15d62070b36cf4553a0250717ecf46b8",
+   "file": "gpt-oss-20b-MXFP4.gguf",
+   "size": 12109566624,
+   "tier": "medium",
+   "read_bytes_per_token": 2574702336,
+   "read_bytes_source": "gguf (memcalc)",
+   "bench": {
+    "cmd": "llama-bench -m gpt-oss-20b-MXFP4.gguf -p 512 -n 128 -t 10 -r 3 -o json",
+    "pp": {
+     "tokens_per_s": 925.87,
+     "stddev": 0.18,
+     "samples": [
+      926.08,
+      925.77,
+      925.77
+     ]
+    },
+    "tg": {
+     "tokens_per_s": 80.69,
+     "stddev": 0.17,
+     "samples": [
+      80.5,
+      80.82,
+      80.74
+     ]
+    },
+    "build_commit": "a300a9c",
+    "build_number": 1,
+    "backends": "MTL,BLAS",
+    "devices": "auto",
+    "cpu_info": "Accelerate, Apple M4 Pro",
+    "gpu_info": "Apple M4 Pro",
+    "n_cpu_moe": 0,
+    "n_gpu_layers": -1,
+    "flash_attn": -1,
+    "n_batch": 2048,
+    "n_ubatch": 512,
+    "n_threads": 10,
+    "type_k": "f16",
+    "type_v": "f16",
+    "model_type": "gpt-oss 20B MXFP4 MoE",
+    "model_size": 12096558336,
+    "model_n_params": 20914757184
+   },
+   "effective_gbs": 207.8,
+   "ceiling_tokens_per_s": 106.0,
+   "bandwidth_efficiency": 0.761,
+   "eval": {
+    "score": 24,
+    "n": 24,
+    "categories": {
+     "math": "4/4",
+     "reasoning": "6/6",
+     "knowledge": "4/4",
+     "instructions": "4/4",
+     "code": "3/3",
+     "extraction": "2/2",
+     "multilingual": "1/1"
+    },
+    "total_s": 17.2,
+    "server_load_s": 1.0,
+    "params": {
+     "temperature": 0,
+     "max_tokens": 1024,
+     "reasoning_effort": "low"
+    },
+    "rows": [
+     {
+      "id": "math-1",
+      "cat": "math",
+      "ok": true,
+      "answer": "12",
+      "seconds": 0.88,
+      "completion_tokens": 44
+     },
+     {
+      "id": "math-2",
+      "cat": "math",
+      "ok": true,
+      "answer": "1081",
+      "seconds": 0.54,
+      "completion_tokens": 33
+     },
+     {
+      "id": "math-3",
+      "cat": "math",
+      "ok": true,
+      "answer": "155",
+      "seconds": 1.45,
+      "completion_tokens": 99
+     },
+     {
+      "id": "math-4",
+      "cat": "math",
+      "ok": true,
+      "answer": "7",
+      "seconds": 0.55,
+      "completion_tokens": 30
+     },
+     {
+      "id": "reason-1",
+      "cat": "reasoning",
+      "ok": true,
+      "answer": "Carol",
+      "seconds": 0.47,
+      "completion_tokens": 24
+     },
+     {
+      "id": "reason-2",
+      "cat": "reasoning",
+      "ok": true,
+      "answer": "10",
+      "seconds": 0.81,
+      "completion_tokens": 51
+     },
+     {
+      "id": "reason-3",
+      "cat": "reasoning",
+      "ok": true,
+      "answer": "Saturday",
+      "seconds": 0.74,
+      "completion_tokens": 44
+     },
+     {
+      "id": "reason-4",
+      "cat": "reasoning",
+      "ok": true,
+      "answer": "5",
+      "seconds": 1.22,
+      "completion_tokens": 85
+     },
+     {
+      "id": "reason-5",
+      "cat": "reasoning",
+      "ok": true,
+      "answer": "5",
+      "seconds": 0.85,
+      "completion_tokens": 55
+     },
+     {
+      "id": "reason-6",
+      "cat": "reasoning",
+      "ok": true,
+      "answer": "3",
+      "seconds": 0.58,
+      "completion_tokens": 32
+     },
+     {
+      "id": "know-1",
+      "cat": "knowledge",
+      "ok": true,
+      "answer": "Na",
+      "seconds": 0.33,
+      "completion_tokens": 16
+     },
+     {
+      "id": "know-2",
+      "cat": "knowledge",
+      "ok": true,
+      "answer": "1969",
+      "seconds": 0.37,
+      "completion_tokens": 18
+     },
+     {
+      "id": "know-3",
+      "cat": "knowledge",
+      "ok": true,
+      "answer": "Pacific Ocean",
+      "seconds": 0.34,
+      "completion_tokens": 17
+     },
+     {
+      "id": "know-4",
+      "cat": "knowledge",
+      "ok": true,
+      "answer": "Gabriel Garc\u00eda M\u00e1rquez",
+      "seconds": 0.42,
+      "completion_tokens": 22
+     },
+     {
+      "id": "instr-1",
+      "cat": "instructions",
+      "ok": true,
+      "answer": "red, green, blue",
+      "seconds": 0.44,
+      "completion_tokens": 24
+     },
+     {
+      "id": "instr-2",
+      "cat": "instructions",
+      "ok": true,
+      "answer": "ananab",
+      "seconds": 0.43,
+      "completion_tokens": 25
+     },
+     {
+      "id": "instr-3",
+      "cat": "instructions",
+      "ok": true,
+      "answer": "Cats purr softly in moonlight.",
+      "seconds": 0.82,
+      "completion_tokens": 54
+     },
+     {
+      "id": "instr-4",
+      "cat": "instructions",
+      "ok": true,
+      "answer": "{\"city\":\"Paris\",\"country\":\"France\"}",
+      "seconds": 0.56,
+      "completion_tokens": 30
+     },
+     {
+      "id": "code-1",
+      "cat": "code",
+      "ok": true,
+      "answer": "14",
+      "seconds": 0.7,
+      "completion_tokens": 41
+     },
+     {
+      "id": "code-2",
+      "cat": "code",
+      "ok": true,
+      "answer": "4",
+      "seconds": 0.88,
+      "completion_tokens": 58
+     },
+     {
+      "id": "code-3",
+      "cat": "code",
+      "ok": true,
+      "answer": "[ 1, 10, 9 ]",
+      "seconds": 2.65,
+      "completion_tokens": 199
+     },
+     {
+      "id": "extract-1",
+      "cat": "extraction",
+      "ok": true,
+      "answer": "44.82",
+      "seconds": 0.43,
+      "completion_tokens": 23
+     },
+     {
+      "id": "extract-2",
+      "cat": "extraction",
+      "ok": true,
+      "answer": "Thursday",
+      "seconds": 0.41,
+      "completion_tokens": 21
+     },
+     {
+      "id": "lang-1",
+      "cat": "multilingual",
+      "ok": true,
+      "answer": "Muchas gracias.",
+      "seconds": 0.34,
+      "completion_tokens": 16
+     }
+    ]
+   }
+  },
+  "qwen3.8-27b-iq4_xs": {
+   "repo": "unsloth/Qwen3.8-27B-GGUF",
+   "rev": "4af51b3542f775b0a8e4b310bfb3f17e01c306c9",
+   "file": "Qwen3.8-27B-UD-IQ4_XS.gguf",
+   "size": 14352911264,
+   "tier": "large",
+   "read_bytes_per_token": 13444601856,
+   "read_bytes_source": "gguf (memcalc)",
+   "bench": {
+    "cmd": "llama-bench -m Qwen3.8-27B-UD-IQ4_XS.gguf -p 512 -n 128 -t 10 -r 3 -o json",
+    "pp": {
+     "tokens_per_s": 125.4,
+     "stddev": 0.39,
+     "samples": [
+      125.6,
+      125.66,
+      124.96
+     ]
+    },
+    "tg": {
+     "tokens_per_s": 13.73,
+     "stddev": 0.02,
+     "samples": [
+      13.75,
+      13.71,
+      13.73
+     ]
+    },
+    "build_commit": "a300a9c",
+    "build_number": 1,
+    "backends": "MTL,BLAS",
+    "devices": "auto",
+    "cpu_info": "Accelerate, Apple M4 Pro",
+    "gpu_info": "Apple M4 Pro",
+    "n_cpu_moe": 0,
+    "n_gpu_layers": -1,
+    "flash_attn": -1,
+    "n_batch": 2048,
+    "n_ubatch": 512,
+    "n_threads": 10,
+    "type_k": "f16",
+    "type_v": "f16",
+    "model_type": "qwen35 27B IQ4_XS - 4.25 bpw",
+    "model_size": 14341914624,
+    "model_n_params": 27320697856
+   },
+   "effective_gbs": 184.6,
+   "ceiling_tokens_per_s": 20.3,
+   "bandwidth_efficiency": 0.676,
+   "eval": {
+    "score": 21,
+    "n": 24,
+    "categories": {
+     "math": "3/4",
+     "reasoning": "5/6",
+     "knowledge": "4/4",
+     "instructions": "3/4",
+     "code": "3/3",
+     "extraction": "2/2",
+     "multilingual": "1/1"
+    },
+    "total_s": 18.9,
+    "server_load_s": 3.0,
+    "params": {
+     "temperature": 0,
+     "max_tokens": 256,
+     "chat_template_kwargs": {
+      "enable_thinking": false
+     }
+    },
+    "rows": [
+     {
+      "id": "math-1",
+      "cat": "math",
+      "ok": true,
+      "answer": "12",
+      "seconds": 0.85,
+      "completion_tokens": 3
+     },
+     {
+      "id": "math-2",
+      "cat": "math",
+      "ok": true,
+      "answer": "1081",
+      "seconds": 0.71,
+      "completion_tokens": 5
+     },
+     {
+      "id": "math-3",
+      "cat": "math",
+      "ok": true,
+      "answer": "155",
+      "seconds": 0.87,
+      "completion_tokens": 4
+     },
+     {
+      "id": "math-4",
+      "cat": "math",
+      "ok": false,
+      "answer": "6",
+      "seconds": 0.8,
+      "completion_tokens": 2
+     },
+     {
+      "id": "reason-1",
+      "cat": "reasoning",
+      "ok": true,
+      "answer": "Carol",
+      "seconds": 0.51,
+      "completion_tokens": 2
+     },
+     {
+      "id": "reason-2",
+      "cat": "reasoning",
+      "ok": false,
+      "answer": "9",
+      "seconds": 0.74,
+      "completion_tokens": 2
+     },
+     {
+      "id": "reason-3",
+      "cat": "reasoning",
+      "ok": true,
+      "answer": "Saturday",
+      "seconds": 0.75,
+      "completion_tokens": 2
+     },
+     {
+      "id": "reason-4",
+      "cat": "reasoning",
+      "ok": true,
+      "answer": "5",
+      "seconds": 0.73,
+      "completion_tokens": 2
+     },
+     {
+      "id": "reason-5",
+      "cat": "reasoning",
+      "ok": true,
+      "answer": "5",
+      "seconds": 0.76,
+      "completion_tokens": 2
+     },
+     {
+      "id": "reason-6",
+      "cat": "reasoning",
+      "ok": true,
+      "answer": "3",
+      "seconds": 0.52,
+      "completion_tokens": 2
+     },
+     {
+      "id": "know-1",
+      "cat": "knowledge",
+      "ok": true,
+      "answer": "Na",
+      "seconds": 0.5,
+      "completion_tokens": 2
+     },
+     {
+      "id": "know-2",
+      "cat": "knowledge",
+      "ok": true,
+      "answer": "1969",
+      "seconds": 0.71,
+      "completion_tokens": 5
+     },
+     {
+      "id": "know-3",
+      "cat": "knowledge",
+      "ok": true,
+      "answer": "Pacific Ocean",
+      "seconds": 0.59,
+      "completion_tokens": 3
+     },
+     {
+      "id": "know-4",
+      "cat": "knowledge",
+      "ok": true,
+      "answer": "Gabriel Garc\u00eda M\u00e1rquez",
+      "seconds": 0.79,
+      "completion_tokens": 6
+     },
+     {
+      "id": "instr-1",
+      "cat": "instructions",
+      "ok": true,
+      "answer": "red, green, blue",
+      "seconds": 0.83,
+      "completion_tokens": 6
+     },
+     {
+      "id": "instr-2",
+      "cat": "instructions",
+      "ok": true,
+      "answer": "ananab",
+      "seconds": 0.58,
+      "completion_tokens": 3
+     },
+     {
+      "id": "instr-3",
+      "cat": "instructions",
+      "ok": false,
+      "answer": "Cats sleep all day.",
+      "seconds": 0.88,
+      "completion_tokens": 7
+     },
+     {
+      "id": "instr-4",
+      "cat": "instructions",
+      "ok": true,
+      "answer": "{\"city\": \"Paris\", \"country\": \"France\"}",
+      "seconds": 1.58,
+      "completion_tokens": 13
+     },
+     {
+      "id": "code-1",
+      "cat": "code",
+      "ok": true,
+      "answer": "14",
+      "seconds": 0.85,
+      "completion_tokens": 3
+     },
+     {
+      "id": "code-2",
+      "cat": "code",
+      "ok": true,
+      "answer": "4",
+      "seconds": 0.75,
+      "completion_tokens": 2
+     },
+     {
+      "id": "code-3",
+      "cat": "code",
+      "ok": true,
+      "answer": "1,10,9",
+      "seconds": 1.14,
+      "completion_tokens": 7
+     },
+     {
+      "id": "extract-1",
+      "cat": "extraction",
+      "ok": true,
+      "answer": "44.82",
+      "seconds": 1.07,
+      "completion_tokens": 6
+     },
+     {
+      "id": "extract-2",
+      "cat": "extraction",
+      "ok": true,
+      "answer": "Thursday",
+      "seconds": 0.74,
+      "completion_tokens": 2
+     },
+     {
+      "id": "lang-1",
+      "cat": "multilingual",
+      "ok": true,
+      "answer": "Muchas gracias",
+      "seconds": 0.7,
+      "completion_tokens": 4
+     }
+    ]
+   }
+  }
+ }
+}

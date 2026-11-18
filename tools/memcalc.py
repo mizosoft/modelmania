@@ -69,6 +69,12 @@ def read_gguf(path: str) -> dict:
     def a(key, default=None):
         return field(f"{arch}.{key}", default)
 
+    # Multi-token-prediction (MTP / "nextn") layers sit at the end of the block list.
+    # They are loaded, but only run for MTP speculative decoding, not per normal token.
+    n_blocks = a("block_count") or 0
+    n_mtp = a("nextn_predict_layers", 0) or 0
+    mtp_prefixes = tuple(f"blk.{i}." for i in range(n_blocks - n_mtp, n_blocks))
+
     # Sum tensor bytes, separating the parts that are NOT read for every token.
     total = expert = lookup_only = 0
     has_output = False
@@ -76,6 +82,9 @@ def read_gguf(path: str) -> dict:
         n = int(t.n_bytes)
         total += n
         name = t.name
+        if n_mtp and name.startswith(mtp_prefixes):
+            lookup_only += n         # not touched when generating normally
+            continue
         if "_exps" in name:          # MoE expert weights (ffn_up_exps, ...)
             expert += n
         if name.startswith("per_layer_token_embd"):  # Gemma per-layer embeddings
@@ -92,7 +101,8 @@ def read_gguf(path: str) -> dict:
         "file_bytes": os.path.getsize(path),
         "arch": arch,
         "name": field("general.name", "?"),
-        "n_layers": a("block_count"),
+        "n_layers": n_blocks - n_mtp,
+        "n_mtp_layers": n_mtp,
         "n_embd": a("embedding_length"),
         "n_head": a("attention.head_count"),
         "n_head_kv": a("attention.head_count_kv"),
@@ -214,7 +224,8 @@ def main() -> None:
                       + expert * m["n_expert_used"] / m["n_expert"])
         else:
             active = m["tensor_bytes"] - m["lookup_only_bytes"]
-        print(f"Model     : {m['name']}  (arch={m['arch']}, {m['n_layers']} layers)")
+        mtp = f" + {m['n_mtp_layers']} MTP layer (not read per token)" if m["n_mtp_layers"] else ""
+        print(f"Model     : {m['name']}  (arch={m['arch']}, {m['n_layers']} layers{mtp})")
         if m["n_expert"]:
             print(f"MoE       : {m['n_expert_used']} of {m['n_expert']} experts used per token")
         full = sum(1 for l in layers if l[1] == "full")

@@ -1,0 +1,202 @@
+{
+ "label": "Qwen3.8-27B-UD-IQ4_XS",
+ "set": "basic.jsonl",
+ "score": 21,
+ "n": 24,
+ "think": false,
+ "rows": [
+  {
+   "id": "math-1",
+   "cat": "math",
+   "ok": true,
+   "answer": "12",
+   "seconds": 1.23,
+   "completion_tokens": 3
+  },
+  {
+   "id": "math-2",
+   "cat": "math",
+   "ok": true,
+   "answer": "1081",
+   "seconds": 0.73,
+   "completion_tokens": 5
+  },
+  {
+   "id": "math-3",
+   "cat": "math",
+   "ok": true,
+   "answer": "155",
+   "seconds": 0.89,
+   "completion_tokens": 4
+  },
+  {
+   "id": "math-4",
+   "cat": "math",
+   "ok": false,
+   "answer": "6",
+   "seconds": 0.74,
+   "completion_tokens": 2
+  },
+  {
+   "id": "reason-1",
+   "cat": "reasoning",
+   "ok": true,
+   "answer": "Carol",
+   "seconds": 0.51,
+   "completion_tokens": 2
+  },
+  {
+   "id": "reason-2",
+   "cat": "reasoning",
+   "ok": false,
+   "answer": "9",
+   "seconds": 0.77,
+   "completion_tokens": 2
+  },
+  {
+   "id": "reason-3",
+   "cat": "reasoning",
+   "ok": true,
+   "answer": "Saturday",
+   "seconds": 0.72,
+   "completion_tokens": 2
+  },
+  {
+   "id": "reason-4",
+   "cat": "reasoning",
+   "ok": true,
+   "answer": "5",
+   "seconds": 0.75,
+   "completion_tokens": 2
+  },
+  {
+   "id": "reason-5",
+   "cat": "reasoning",
+   "ok": true,
+   "answer": "5",
+   "seconds": 0.75,
+   "completion_tokens": 2
+  },
+  {
+   "id": "reason-6",
+   "cat": "reasoning",
+   "ok": true,
+   "answer": "3",
+   "seconds": 0.5,
+   "completion_tokens": 2
+  },
+  {
+   "id": "know-1",
+   "cat": "knowledge",
+   "ok": true,
+   "answer": "Na",
+   "seconds": 0.53,
+   "completion_tokens": 2
+  },
+  {
+   "id": "know-2",
+   "cat": "knowledge",
+   "ok": true,
+   "answer": "1969",
+   "seconds": 0.74,
+   "completion_tokens": 5
+  },
+  {
+   "id": "know-3",
+   "cat": "knowledge",
+   "ok": true,
+   "answer": "Pacific Ocean",
+   "seconds": 0.58,
+   "completion_tokens": 3
+  },
+  {
+   "id": "know-4",
+   "cat": "knowledge",
+   "ok": true,
+   "answer": "Gabriel Garc\u00eda M\u00e1rquez",
+   "seconds": 0.84,
+   "completion_tokens": 6
+  },
+  {
+   "id": "instr-1",
+   "cat": "instructions",
+   "ok": true,
+   "answer": "red, green, blue",
+   "seconds": 0.79,
+   "completion_tokens": 6
+  },
+  {
+   "id": "instr-2",
+   "cat": "instructions",
+   "ok": true,
+   "answer": "ananab",
+   "seconds": 0.59,
+   "completion_tokens": 3
+  },
+  {
+   "id": "instr-3",
+   "cat": "instructions",
+   "ok": false,
+   "answer": "Cats sleep all day.",
+   "seconds": 0.88,
+   "completion_tokens": 7
+  },
+  {
+   "id": "instr-4",
+   "cat": "instructions",
+   "ok": true,
+   "answer": "{\"city\": \"Paris\", \"country\": \"France\"}",
+   "seconds": 1.62,
+   "completion_tokens": 13
+  },
+  {
+   "id": "code-1",
+   "cat": "code",
+   "ok": true,
+   "answer": "14",
+   "seconds": 0.82,
+   "completion_tokens": 3
+  },
+  {
+   "id": "code-2",
+   "cat": "code",
+   "ok": true,
+   "answer": "4",
+   "seconds": 0.73,
+   "completion_tokens": 2
+  },
+  {
+   "id": "code-3",
+   "cat": "code",
+   "ok": true,
+   "answer": "1,10,9",
+   "seconds": 1.12,
+   "completion_tokens": 7
+  },
+  {
+   "id": "extract-1",
+   "cat": "extraction",
+   "ok": true,
+   "answer": "44.82",
+   "seconds": 1.07,
+   "completion_tokens": 6
+  },
+  {
+   "id": "extract-2",
+   "cat": "extraction",
+   "ok": true,
+   "answer": "Thursday",
+   "seconds": 0.76,
+   "completion_tokens": 2
+  },
+  {
+   "id": "lang-1",
+   "cat": "multilingual",
+   "ok": true,
+   "answer": "Muchas gracias",
+   "seconds": 0.72,
+   "completion_tokens": 4
+  }
+ ],
+ "date": "2026-11-18"
+}

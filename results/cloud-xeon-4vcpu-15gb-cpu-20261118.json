@@ -1,0 +1,722 @@
+{
+ "mmbench": 1,
+ "imported": true,
+ "date": "2026-11-18",
+ "note": "Reconstructed from measurements made before mmbench existed: llama-bench text tables in docs/05-measurements.md (-t 4 -p 512 -n 128) and labs/03_mini_eval.py runs in results/cloud-xeon-4vcpu-15gb-cpu/ (temperature 0, thinking off, gpt-oss reasoning effort low, max_tokens 256, server -c 16384). Same model files and llama.cpp commit as mmbench uses. No stddev was recorded; peak bandwidth of the vCPU slice is unknown.",
+ "fingerprint": {
+  "machine_id": "cloud-xeon-4vcpu-15gb-cpu",
+  "os": "Linux, Ubuntu 24.04 (cloud VM)",
+  "cpu": "Intel Xeon, 4 vCPUs (AVX-512, AVX-512-VNNI/BF16, AMX)",
+  "logical_cores": 4,
+  "physical_cores": null,
+  "perf_cores": null,
+  "ram_gib": 15.0,
+  "gpus": [],
+  "backend": "CPU",
+  "llama_cpp": {
+   "version": "1.0.0-dev",
+   "commit": "a300a9c",
+   "built_with": "-DGGML_NATIVE=ON"
+  },
+  "peak_bandwidth_gbs": null,
+  "bandwidth_source": "unknown (cloud vCPU slice; ~20-30 GB/s effective measured)",
+  "threads": 4
+ },
+ "settings": {
+  "n_prompt": 512,
+  "n_gen": 128,
+  "eval_ctx": 4096,
+  "temperature": 0,
+  "thinking": "off (gpt-oss: reasoning_effort=low)",
+  "set_version": "2026-11"
+ },
+ "models": {
+  "qwen3.5-4b-q4_0": {
+   "repo": "unsloth/Qwen3.5-4B-GGUF",
+   "file": "Qwen3.5-4B-Q4_0.gguf",
+   "size": 2583221408,
+   "tier": "base",
+   "read_bytes_per_token": 2572253184,
+   "read_bytes_source": "gguf (memcalc), same file",
+   "bench": {
+    "pp": {
+     "tokens_per_s": 57
+    },
+    "tg": {
+     "tokens_per_s": 11.0
+    },
+    "n_threads": 4,
+    "backends": "CPU",
+    "source": "docs/05-measurements.md section 1"
+   },
+   "effective_gbs": 28.3,
+   "eval": {
+    "score": 16,
+    "n": 24,
+    "categories": {
+     "math": "2/4",
+     "reasoning": "4/6",
+     "knowledge": "4/4",
+     "instructions": "2/4",
+     "code": "1/3",
+     "extraction": "2/2",
+     "multilingual": "1/1"
+    },
+    "total_s": 29.6,
+    "source": "results/cloud-xeon-4vcpu-15gb-cpu/eval-Qwen3.5-4B-Q4_0.json",
+    "rows": [
+     {
+      "id": "math-1",
+      "cat": "math",
+      "ok": true,
+      "answer": "12",
+      "seconds": 1.21,
+      "completion_tokens": 3
+     },
+     {
+      "id": "math-2",
+      "cat": "math",
+      "ok": true,
+      "answer": "1081",
+      "seconds": 1.11,
+      "completion_tokens": 5
+     },
+     {
+      "id": "math-3",
+      "cat": "math",
+      "ok": false,
+      "answer": "145",
+      "seconds": 1.25,
+      "completion_tokens": 4
+     },
+     {
+      "id": "math-4",
+      "cat": "math",
+      "ok": false,
+      "answer": "3",
+      "seconds": 1.26,
+      "completion_tokens": 2
+     },
+     {
+      "id": "reason-1",
+      "cat": "reasoning",
+      "ok": true,
+      "answer": "Carol",
+      "seconds": 0.9,
+      "completion_tokens": 2
+     },
+     {
+      "id": "reason-2",
+      "cat": "reasoning",
+      "ok": false,
+      "answer": "11",
+      "seconds": 1.34,
+      "completion_tokens": 3
+     },
+     {
+      "id": "reason-3",
+      "cat": "reasoning",
+      "ok": false,
+      "answer": "Tuesday",
+      "seconds": 1.14,
+      "completion_tokens": 2
+     },
+     {
+      "id": "reason-4",
+      "cat": "reasoning",
+      "ok": true,
+      "answer": "5",
+      "seconds": 1.19,
+      "completion_tokens": 2
+     },
+     {
+      "id": "reason-5",
+      "cat": "reasoning",
+      "ok": true,
+      "answer": "5",
+      "seconds": 1.22,
+      "completion_tokens": 2
+     },
+     {
+      "id": "reason-6",
+      "cat": "reasoning",
+      "ok": true,
+      "answer": "3",
+      "seconds": 0.94,
+      "completion_tokens": 2
+     },
+     {
+      "id": "know-1",
+      "cat": "knowledge",
+      "ok": true,
+      "answer": "Na",
+      "seconds": 0.8,
+      "completion_tokens": 2
+     },
+     {
+      "id": "know-2",
+      "cat": "knowledge",
+      "ok": true,
+      "answer": "1969",
+      "seconds": 1.2,
+      "completion_tokens": 5
+     },
+     {
+      "id": "know-3",
+      "cat": "knowledge",
+      "ok": true,
+      "answer": "Pacific Ocean",
+      "seconds": 1.0,
+      "completion_tokens": 3
+     },
+     {
+      "id": "know-4",
+      "cat": "knowledge",
+      "ok": true,
+      "answer": "Gabriel Garc\u00eda M\u00e1rquez",
+      "seconds": 1.25,
+      "completion_tokens": 6
+     },
+     {
+      "id": "instr-1",
+      "cat": "instructions",
+      "ok": true,
+      "answer": "red, green, blue",
+      "seconds": 1.25,
+      "completion_tokens": 6
+     },
+     {
+      "id": "instr-2",
+      "cat": "instructions",
+      "ok": false,
+      "answer": "anaban",
+      "seconds": 0.84,
+      "completion_tokens": 3
+     },
+     {
+      "id": "instr-3",
+      "cat": "instructions",
+      "ok": false,
+      "answer": "Cats are wonderful pets.",
+      "seconds": 1.26,
+      "completion_tokens": 7
+     },
+     {
+      "id": "instr-4",
+      "cat": "instructions",
+      "ok": true,
+      "answer": "{\"city\": \"Paris\", \"country\": \"France\"}",
+      "seconds": 2.4,
+      "completion_tokens": 13
+     },
+     {
+      "id": "code-1",
+      "cat": "code",
+      "ok": false,
+      "answer": "30",
+      "seconds": 1.27,
+      "completion_tokens": 3
+     },
+     {
+      "id": "code-2",
+      "cat": "code",
+      "ok": true,
+      "answer": "4",
+      "seconds": 1.2,
+      "completion_tokens": 2
+     },
+     {
+      "id": "code-3",
+      "cat": "code",
+      "ok": false,
+      "answer": "[1,9,10]",
+      "seconds": 1.81,
+      "completion_tokens": 9
+     },
+     {
+      "id": "extract-1",
+      "cat": "extraction",
+      "ok": true,
+      "answer": "44.82",
+      "seconds": 1.46,
+      "completion_tokens": 6
+     },
+     {
+      "id": "extract-2",
+      "cat": "extraction",
+      "ok": true,
+      "answer": "Thursday",
+      "seconds": 1.25,
+      "completion_tokens": 2
+     },
+     {
+      "id": "lang-1",
+      "cat": "multilingual",
+      "ok": true,
+      "answer": "Muchas gracias",
+      "seconds": 1.04,
+      "completion_tokens": 4
+     }
+    ]
+   }
+  },
+  "gemma-4-e4b-qat-q4_0": {
+   "repo": "google/gemma-4-E4B-it-qat-q4_0-gguf",
+   "file": "gemma-4-E4B_q4_0-it.gguf",
+   "size": 5154941280,
+   "tier": "small",
+   "read_bytes_per_token": 2827007144,
+   "read_bytes_source": "gguf (memcalc), same file",
+   "bench": {
+    "pp": {
+     "tokens_per_s": 139
+    },
+    "tg": {
+     "tokens_per_s": 11.4
+    },
+    "n_threads": 4,
+    "backends": "CPU",
+    "source": "docs/05-measurements.md section 1"
+   },
+   "effective_gbs": 32.2,
+   "eval": {
+    "score": 18,
+    "n": 24,
+    "categories": {
+     "math": "3/4",
+     "reasoning": "4/6",
+     "knowledge": "4/4",
+     "instructions": "3/4",
+     "code": "1/3",
+     "extraction": "2/2",
+     "multilingual": "1/1"
+    },
+    "total_s": 20.5,
+    "source": "results/cloud-xeon-4vcpu-15gb-cpu/eval-gemma-4-E4B_q4_0-it.json",
+    "rows": [
+     {
+      "id": "math-1",
+      "cat": "math",
+      "ok": true,
+      "answer": "12",
+      "seconds": 0.71,
+      "completion_tokens": 3
+     },
+     {
+      "id": "math-2",
+      "cat": "math",
+      "ok": true,
+      "answer": "1081",
+      "seconds": 0.76,
+      "completion_tokens": 5
+     },
+     {
+      "id": "math-3",
+      "cat": "math",
+      "ok": true,
+      "answer": "155",
+      "seconds": 1.07,
+      "completion_tokens": 4
+     },
+     {
+      "id": "math-4",
+      "cat": "math",
+      "ok": false,
+      "answer": "6",
+      "seconds": 0.55,
+      "completion_tokens": 2
+     },
+     {
+      "id": "reason-1",
+      "cat": "reasoning",
+      "ok": true,
+      "answer": "Carol",
+      "seconds": 0.5,
+      "completion_tokens": 2
+     },
+     {
+      "id": "reason-2",
+      "cat": "reasoning",
+      "ok": false,
+      "answer": "11",
+      "seconds": 0.93,
+      "completion_tokens": 3
+     },
+     {
+      "id": "reason-3",
+      "cat": "reasoning",
+      "ok": true,
+      "answer": "Saturday",
+      "seconds": 0.55,
+      "completion_tokens": 2
+     },
+     {
+      "id": "reason-4",
+      "cat": "reasoning",
+      "ok": true,
+      "answer": "5",
+      "seconds": 0.83,
+      "completion_tokens": 2
+     },
+     {
+      "id": "reason-5",
+      "cat": "reasoning",
+      "ok": true,
+      "answer": "5",
+      "seconds": 0.94,
+      "completion_tokens": 2
+     },
+     {
+      "id": "reason-6",
+      "cat": "reasoning",
+      "ok": false,
+      "answer": "2",
+      "seconds": 0.49,
+      "completion_tokens": 2
+     },
+     {
+      "id": "know-1",
+      "cat": "knowledge",
+      "ok": true,
+      "answer": "Na",
+      "seconds": 0.42,
+      "completion_tokens": 2
+     },
+     {
+      "id": "know-2",
+      "cat": "knowledge",
+      "ok": true,
+      "answer": "1969",
+      "seconds": 0.76,
+      "completion_tokens": 5
+     },
+     {
+      "id": "know-3",
+      "cat": "knowledge",
+      "ok": true,
+      "answer": "Pacific Ocean",
+      "seconds": 0.54,
+      "completion_tokens": 3
+     },
+     {
+      "id": "know-4",
+      "cat": "knowledge",
+      "ok": true,
+      "answer": "Gabriel Garc\u00eda M\u00e1rquez",
+      "seconds": 0.72,
+      "completion_tokens": 4
+     },
+     {
+      "id": "instr-1",
+      "cat": "instructions",
+      "ok": true,
+      "answer": "red, green, blue",
+      "seconds": 0.88,
+      "completion_tokens": 6
+     },
+     {
+      "id": "instr-2",
+      "cat": "instructions",
+      "ok": true,
+      "answer": "ananab",
+      "seconds": 0.54,
+      "completion_tokens": 3
+     },
+     {
+      "id": "instr-3",
+      "cat": "instructions",
+      "ok": false,
+      "answer": "Cats nap all day.",
+      "seconds": 0.84,
+      "completion_tokens": 6
+     },
+     {
+      "id": "instr-4",
+      "cat": "instructions",
+      "ok": true,
+      "answer": "{\n\"city\": \"Paris\",\n\"country\": \"France\"\n}",
+      "seconds": 2.17,
+      "completion_tokens": 18
+     },
+     {
+      "id": "code-1",
+      "cat": "code",
+      "ok": false,
+      "answer": "30",
+      "seconds": 0.94,
+      "completion_tokens": 3
+     },
+     {
+      "id": "code-2",
+      "cat": "code",
+      "ok": true,
+      "answer": "4",
+      "seconds": 0.87,
+      "completion_tokens": 2
+     },
+     {
+      "id": "code-3",
+      "cat": "code",
+      "ok": false,
+      "answer": "[ 1, 9, 10 ]",
+      "seconds": 1.78,
+      "completion_tokens": 12
+     },
+     {
+      "id": "extract-1",
+      "cat": "extraction",
+      "ok": true,
+      "answer": "44.82",
+      "seconds": 1.22,
+      "completion_tokens": 6
+     },
+     {
+      "id": "extract-2",
+      "cat": "extraction",
+      "ok": true,
+      "answer": "Thursday",
+      "seconds": 0.89,
+      "completion_tokens": 2
+     },
+     {
+      "id": "lang-1",
+      "cat": "multilingual",
+      "ok": true,
+      "answer": "Muchas gracias",
+      "seconds": 0.56,
+      "completion_tokens": 3
+     }
+    ]
+   }
+  },
+  "gpt-oss-20b-mxfp4": {
+   "repo": "ggml-org/gpt-oss-20b-GGUF",
+   "file": "gpt-oss-20b-MXFP4.gguf",
+   "size": 12109566624,
+   "tier": "medium",
+   "read_bytes_per_token": 2574702336,
+   "read_bytes_source": "gguf (memcalc), same file",
+   "bench": {
+    "pp": {
+     "tokens_per_s": 37
+    },
+    "tg": {
+     "tokens_per_s": 10.0
+    },
+    "n_threads": 4,
+    "backends": "CPU",
+    "source": "docs/05-measurements.md section 1"
+   },
+   "effective_gbs": 25.7,
+   "eval": {
+    "score": 24,
+    "n": 24,
+    "categories": {
+     "math": "4/4",
+     "reasoning": "6/6",
+     "knowledge": "4/4",
+     "instructions": "4/4",
+     "code": "3/3",
+     "extraction": "2/2",
+     "multilingual": "1/1"
+    },
+    "total_s": 157.2,
+    "source": "results/cloud-xeon-4vcpu-15gb-cpu/eval-gpt-oss-20b-MXFP4+think-low.json",
+    "rows": [
+     {
+      "id": "math-1",
+      "cat": "math",
+      "ok": true,
+      "answer": "12",
+      "seconds": 8.64,
+      "completion_tokens": 43
+     },
+     {
+      "id": "math-2",
+      "cat": "math",
+      "ok": true,
+      "answer": "1081",
+      "seconds": 4.39,
+      "completion_tokens": 33
+     },
+     {
+      "id": "math-3",
+      "cat": "math",
+      "ok": true,
+      "answer": "155",
+      "seconds": 11.69,
+      "completion_tokens": 99
+     },
+     {
+      "id": "math-4",
+      "cat": "math",
+      "ok": true,
+      "answer": "7",
+      "seconds": 4.34,
+      "completion_tokens": 30
+     },
+     {
+      "id": "reason-1",
+      "cat": "reasoning",
+      "ok": true,
+      "answer": "Carol",
+      "seconds": 3.87,
+      "completion_tokens": 24
+     },
+     {
+      "id": "reason-2",
+      "cat": "reasoning",
+      "ok": true,
+      "answer": "10",
+      "seconds": 6.84,
+      "completion_tokens": 50
+     },
+     {
+      "id": "reason-3",
+      "cat": "reasoning",
+      "ok": true,
+      "answer": "Saturday",
+      "seconds": 5.86,
+      "completion_tokens": 44
+     },
+     {
+      "id": "reason-4",
+      "cat": "reasoning",
+      "ok": true,
+      "answer": "5",
+      "seconds": 11.05,
+      "completion_tokens": 85
+     },
+     {
+      "id": "reason-5",
+      "cat": "reasoning",
+      "ok": true,
+      "answer": "5",
+      "seconds": 17.63,
+      "completion_tokens": 146
+     },
+     {
+      "id": "reason-6",
+      "cat": "reasoning",
+      "ok": true,
+      "answer": "3",
+      "seconds": 5.03,
+      "completion_tokens": 32
+     },
+     {
+      "id": "know-1",
+      "cat": "knowledge",
+      "ok": true,
+      "answer": "Na",
+      "seconds": 2.55,
+      "completion_tokens": 16
+     },
+     {
+      "id": "know-2",
+      "cat": "knowledge",
+      "ok": true,
+      "answer": "1969",
+      "seconds": 2.87,
+      "completion_tokens": 18
+     },
+     {
+      "id": "know-3",
+      "cat": "knowledge",
+      "ok": true,
+      "answer": "Pacific Ocean",
+      "seconds": 2.8,
+      "completion_tokens": 17
+     },
+     {
+      "id": "know-4",
+      "cat": "knowledge",
+      "ok": true,
+      "answer": "Gabriel Garc\u00eda M\u00e1rquez",
+      "seconds": 3.49,
+      "completion_tokens": 22
+     },
+     {
+      "id": "instr-1",
+      "cat": "instructions",
+      "ok": true,
+      "answer": "red, green, blue",
+      "seconds": 3.68,
+      "completion_tokens": 24
+     },
+     {
+      "id": "instr-2",
+      "cat": "instructions",
+      "ok": true,
+      "answer": "ananab",
+      "seconds": 3.54,
+      "completion_tokens": 25
+     },
+     {
+      "id": "instr-3",
+      "cat": "instructions",
+      "ok": true,
+      "answer": "Cats purr softly in sunlight.",
+      "seconds": 6.39,
+      "completion_tokens": 51
+     },
+     {
+      "id": "instr-4",
+      "cat": "instructions",
+      "ok": true,
+      "answer": "{\"city\":\"Paris\",\"country\":\"France\"}",
+      "seconds": 4.65,
+      "completion_tokens": 30
+     },
+     {
+      "id": "code-1",
+      "cat": "code",
+      "ok": true,
+      "answer": "14",
+      "seconds": 5.81,
+      "completion_tokens": 41
+     },
+     {
+      "id": "code-2",
+      "cat": "code",
+      "ok": true,
+      "answer": "4",
+      "seconds": 7.74,
+      "completion_tokens": 58
+     },
+     {
+      "id": "code-3",
+      "cat": "code",
+      "ok": true,
+      "answer": "[ 1, 10, 9 ]",
+      "seconds": 22.38,
+      "completion_tokens": 199
+     },
+     {
+      "id": "extract-1",
+      "cat": "extraction",
+      "ok": true,
+      "answer": "44.82",
+      "seconds": 3.68,
+      "completion_tokens": 20
+     },
+     {
+      "id": "extract-2",
+      "cat": "extraction",
+      "ok": true,
+      "answer": "Thursday",
+      "seconds": 5.86,
+      "completion_tokens": 41
+     },
+     {
+      "id": "lang-1",
+      "cat": "multilingual",
+      "ok": true,
+      "answer": "Muchas gracias.",
+      "seconds": 2.4,
+      "completion_tokens": 16
+     }
+    ]
+   }
+  }
+ }
+}
