@@ -56,17 +56,17 @@ MODELS = [
      "repo": "unsloth/Qwen3.5-4B-GGUF", "rev": "e87f176479d0855a907a41277aca2f8ee7a09523",
      "file": "Qwen3.5-4B-Q4_0.gguf", "size": 2583221408,
      "sha256": "298fcb5fe7a77ccc79745ae24751560c5ac56874caff4bb39b1f2055bd72b8bb",
-     "read_bytes": None, "eval": {"think": False, "max_tokens": 256}},
+     "read_bytes": 2572253184, "eval": {"think": False, "max_tokens": 256}},
     {"id": "gemma-4-e4b-qat-q4_0", "tier": "small",
      "repo": "google/gemma-4-E4B-it-qat-q4_0-gguf", "rev": "4b4a2c1d584be7264f87aac328a1bc739ce81b6c",
      "file": "gemma-4-E4B_q4_0-it.gguf", "size": 5154941280,
      "sha256": "676c35070db6dbe52f93e9c864ee0fba4eddea94b9c875d9cb10daff453fbaee",
-     "read_bytes": None, "eval": {"think": False, "max_tokens": 256}},
+     "read_bytes": 2827007144, "eval": {"think": False, "max_tokens": 256}},
     {"id": "gpt-oss-20b-mxfp4", "tier": "medium",
      "repo": "ggml-org/gpt-oss-20b-GGUF", "rev": "41e8a94d15d62070b36cf4553a0250717ecf46b8",
      "file": "gpt-oss-20b-MXFP4.gguf", "size": 12109566624,
      "sha256": "27cd6c432c7672cb812a92f611cf3ba7bbc35928262bb1e1253ff4ee6ae35901",
-     "read_bytes": None, "eval": {"think": True, "reasoning_effort": "low", "max_tokens": 1024}},
+     "read_bytes": 2574702336, "eval": {"think": True, "reasoning_effort": "low", "max_tokens": 1024}},
     {"id": "qwen3.8-27b-iq4_xs", "tier": "large",
      "repo": "unsloth/Qwen3.8-27B-GGUF", "rev": "4af51b3542f775b0a8e4b310bfb3f17e01c306c9",
      "file": "Qwen3.8-27B-UD-IQ4_XS.gguf", "size": 14352911264,
@@ -141,6 +141,29 @@ def cpu_info() -> dict:
         except OSError:
             pass
         info["physical_cores"] = len(cores) or None
+        # ARM Linux has no "model name"/"core id" in /proc/cpuinfo: ask lscpu
+        out = run_cmd(["lscpu"])
+        m = re.search(r"^Model name:\s*(.+)$", out, re.M)
+        vendor = re.search(r"^Vendor ID:\s*(.+)$", out, re.M)
+        if info["name"] in ("", platform.machine()):
+            if m and m.group(1).strip() not in ("-", ""):
+                info["name"] = m.group(1).strip()
+            elif vendor:
+                info["name"] = f"{vendor.group(1).strip()} {platform.machine()}"
+        if not info["physical_cores"]:
+            rows = {l for l in run_cmd(["lscpu", "-p=core,socket"]).splitlines() if l and l[0] != "#"}
+            info["physical_cores"] = len(rows) or None
+        # containers: a CPU quota (docker --cpus) or affinity mask limits usable cores
+        usable = len(os.sched_getaffinity(0)) if hasattr(os, "sched_getaffinity") else None
+        try:
+            with open("/sys/fs/cgroup/cpu.max") as f:
+                quota, period = f.read().split()[:2]
+            if quota != "max":
+                usable = min(usable or 10**6, max(1, int(int(quota) / int(period))))
+        except (OSError, ValueError):
+            pass
+        if usable and usable < (info["logical_cores"] or 0):
+            info["usable_cores"] = usable
     elif system == "Windows":
         try:
             import winreg
@@ -297,6 +320,7 @@ def fingerprint(server: str, bandwidth: float | None, threads: int) -> dict:
         "os": os_info(),
         "cpu": cpu["name"], "logical_cores": cpu["logical_cores"],
         "physical_cores": cpu["physical_cores"], "perf_cores": cpu["perf_cores"],
+        **({"usable_cores": cpu["usable_cores"]} if cpu.get("usable_cores") else {}),
         "ram_gib": round((ram or 0) / GIB, 1),
         "gpus": [{"name": g["name"], "vram_gib": round(g["total_mib"] / 1024, 2),
                   **({"gpu_cores": gpu_cores} if gpu_cores else {})} for g in gpus],
@@ -319,7 +343,8 @@ def memory_budget(fp: dict) -> float:
 def default_threads() -> int:
     """Performance cores on Apple/hybrid chips, physical cores elsewhere."""
     c = cpu_info()
-    return c["perf_cores"] or c["physical_cores"] or os.cpu_count() or 4
+    n = c["perf_cores"] or c["physical_cores"] or os.cpu_count() or 4
+    return min(n, c.get("usable_cores") or n)
 
 
 # ---------------------------------------------------------------------------
@@ -523,12 +548,18 @@ def main_run(a) -> None:
     if not (server and bench):
         raise SystemExit("llama-server / llama-bench not found. Build (scripts/build-llama-cpp.sh), "
                          "install (brew/winget), or pass --llama-bin DIR")
+    for b in (server, bench):  # e.g. a macOS build found on Linux, or missing DLLs on Windows
+        try:
+            subprocess.run([b, "--version"], capture_output=True, timeout=60)
+        except OSError as e:
+            raise SystemExit(f"Cannot run {b}: {e}\n(built for another OS/CPU? rebuild it, or pass --llama-bin DIR)")
     threads = a.threads or default_threads()
     fp = fingerprint(server, a.bandwidth, threads)
     if a.machine_id:
         fp["machine_id"] = a.machine_id
     log(f"Machine : {fp['machine_id']}")
-    log(f"  {fp['os']} | {fp['cpu']} | {fp['logical_cores']} cores | {fp['ram_gib']} GiB RAM")
+    usable = f" ({fp['usable_cores']} usable)" if fp.get("usable_cores") else ""
+    log(f"  {fp['os']} | {fp['cpu']} | {fp['logical_cores']} cores{usable} | {fp['ram_gib']} GiB RAM")
     for g in fp["gpus"]:
         log(f"  GPU {g['name']}: {g['vram_gib']} GiB usable")
     log(f"  backend {fp['backend']} | llama.cpp {fp['llama_cpp']['version']} ({fp['llama_cpp']['commit']})"
@@ -665,6 +696,12 @@ def compare(paths: list[str]) -> None:
 
 
 def main() -> None:
+    # Windows consoles (cp1252...) can't print every character a model writes
+    for stream in (sys.stdout, sys.stderr):
+        try:
+            stream.reconfigure(errors="replace")
+        except (AttributeError, ValueError):
+            pass
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--list", action="store_true", help="show fingerprint and the model plan, run nothing")
     ap.add_argument("--compare", nargs="*", metavar="FILE",
