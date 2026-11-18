@@ -1,0 +1,18 @@
+# Model weights are big - never commit them
+/models
+*.gguf
+*.safetensors
+
+# Third-party source checkouts / builds
+/vendor
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# Scratch output (results/ is committed on purpose; logs are not)
+*.log
+data/
+results/rag-index.json

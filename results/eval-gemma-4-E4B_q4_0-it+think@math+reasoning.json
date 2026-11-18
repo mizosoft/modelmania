@@ -1,0 +1,90 @@
+{
+ "label": "gemma-4-E4B_q4_0-it+think@math+reasoning",
+ "set": "basic.jsonl",
+ "score": 9,
+ "n": 10,
+ "think": true,
+ "rows": [
+  {
+   "id": "math-1",
+   "cat": "math",
+   "ok": true,
+   "answer": "12",
+   "seconds": 0.89,
+   "completion_tokens": 3
+  },
+  {
+   "id": "math-2",
+   "cat": "math",
+   "ok": true,
+   "answer": "1081",
+   "seconds": 0.89,
+   "completion_tokens": 5
+  },
+  {
+   "id": "math-3",
+   "cat": "math",
+   "ok": true,
+   "answer": "155",
+   "seconds": 29.87,
+   "completion_tokens": 289
+  },
+  {
+   "id": "math-4",
+   "cat": "math",
+   "ok": true,
+   "answer": "7",
+   "seconds": 0.7,
+   "completion_tokens": 2
+  },
+  {
+   "id": "reason-1",
+   "cat": "reasoning",
+   "ok": true,
+   "answer": "Carol",
+   "seconds": 8.23,
+   "completion_tokens": 81
+  },
+  {
+   "id": "reason-2",
+   "cat": "reasoning",
+   "ok": false,
+   "answer": "13",
+   "seconds": 1.02,
+   "completion_tokens": 3
+  },
+  {
+   "id": "reason-3",
+   "cat": "reasoning",
+   "ok": true,
+   "answer": "Saturday",
+   "seconds": 16.21,
+   "completion_tokens": 163
+  },
+  {
+   "id": "reason-4",
+   "cat": "reasoning",
+   "ok": true,
+   "answer": "5",
+   "seconds": 0.95,
+   "completion_tokens": 2
+  },
+  {
+   "id": "reason-5",
+   "cat": "reasoning",
+   "ok": true,
+   "answer": "5",
+   "seconds": 37.69,
+   "completion_tokens": 377
+  },
+  {
+   "id": "reason-6",
+   "cat": "reasoning",
+   "ok": true,
+   "answer": "3",
+   "seconds": 0.66,
+   "completion_tokens": 2
+  }
+ ],
+ "date": "2026-11-18"
+}

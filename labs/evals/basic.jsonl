@@ -1,0 +1,24 @@
+{"id": "math-1", "cat": "math", "q": "A shop sells pens at 3 for $2. How many dollars do 18 pens cost? Reply with only the number.", "check": "number", "a": 12}
+{"id": "math-2", "cat": "math", "q": "What is 23 * 47? Reply with only the number.", "check": "number", "a": 1081}
+{"id": "math-3", "cat": "math", "q": "A train leaves at 14:35 and arrives at 17:10. How many minutes is the trip? Reply with only the number.", "check": "number", "a": 155}
+{"id": "math-4", "cat": "math", "q": "If x + 2x + 3x = 42, what is x? Reply with only the number.", "check": "number", "a": 7}
+{"id": "reason-1", "cat": "reasoning", "q": "Alice is taller than Bob. Bob is taller than Carol. Who is the shortest? Reply with one name.", "check": "exact", "a": "carol"}
+{"id": "reason-2", "cat": "reasoning", "q": "I have 3 apples. I eat one, then buy two bags with 4 apples each. How many apples do I have now? Reply with only the number.", "check": "number", "a": 10}
+{"id": "reason-3", "cat": "reasoning", "q": "If today is Wednesday, what day of the week will it be 10 days from now? Reply with one word.", "check": "exact", "a": "saturday"}
+{"id": "reason-4", "cat": "reasoning", "q": "A bat and a ball cost $1.10 in total. The bat costs $1.00 more than the ball. How many cents does the ball cost? Reply with only the number.", "check": "number", "a": 5}
+{"id": "reason-5", "cat": "reasoning", "q": "If it takes 5 machines 5 minutes to make 5 widgets, how many minutes would it take 100 machines to make 100 widgets? Reply with only the number.", "check": "number", "a": 5}
+{"id": "reason-6", "cat": "reasoning", "q": "How many times does the letter 'r' appear in the word 'strawberry'? Reply with only the number.", "check": "number", "a": 3}
+{"id": "know-1", "cat": "knowledge", "q": "What is the chemical symbol for sodium? Reply with only the symbol.", "check": "exact", "a": "na"}
+{"id": "know-2", "cat": "knowledge", "q": "In which year did the Apollo 11 Moon landing happen? Reply with only the year.", "check": "number", "a": 1969}
+{"id": "know-3", "cat": "knowledge", "q": "What is the largest ocean on Earth? Reply with one or two words.", "check": "regex", "a": "pacific"}
+{"id": "know-4", "cat": "knowledge", "q": "Who wrote the novel 'One Hundred Years of Solitude'? Reply with the author's full name only.", "check": "regex", "a": "m[aá]rquez"}
+{"id": "instr-1", "cat": "instructions", "q": "List the three primary colors of light, comma-separated, lowercase, and nothing else.", "check": "set", "a": ["red", "green", "blue"]}
+{"id": "instr-2", "cat": "instructions", "q": "Reply with the word 'banana' written backwards, and nothing else.", "check": "exact", "a": "ananab"}
+{"id": "instr-3", "cat": "instructions", "q": "Write one sentence of exactly 5 words about cats. Output only the sentence.", "check": "word_count", "a": 5}
+{"id": "instr-4", "cat": "instructions", "q": "Return a JSON object with keys \"city\" and \"country\" for where the Eiffel Tower is. Output only the JSON.", "check": "json_fields", "a": {"city": "paris", "country": "france"}}
+{"id": "code-1", "cat": "code", "q": "What does this Python code print?\n\nprint(sum(i*i for i in range(4)))\n\nReply with only the output.", "check": "number", "a": 14}
+{"id": "code-2", "cat": "code", "q": "What does this Python code print?\n\nx = [1, 2, 3]\ny = x\ny.append(4)\nprint(len(x))\n\nReply with only the output.", "check": "number", "a": 4}
+{"id": "code-3", "cat": "code", "q": "What does this JavaScript print in Node.js?\n\nconsole.log([10, 9, 1].sort())\n\nReply with only the printed output.", "check": "regex", "a": "^\\[?\\s*1\\s*,\\s*10\\s*,\\s*9\\s*\\]?$"}
+{"id": "extract-1", "cat": "extraction", "q": "Extract the total amount from this receipt line and reply with only the number: 'Subtotal 41.50, tax 3.32, TOTAL DUE 44.82 EUR'", "check": "number", "a": 44.82}
+{"id": "extract-2", "cat": "extraction", "q": "Text: 'The meeting was moved from Tuesday 3pm to Thursday 11am.' On which day is the meeting now? Reply with one word.", "check": "exact", "a": "thursday"}
+{"id": "lang-1", "cat": "multilingual", "q": "Translate 'thank you very much' into Spanish. Reply with only the translation.", "check": "regex", "a": "muchas gracias"}
