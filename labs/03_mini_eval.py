@@ -13,6 +13,8 @@ Each line of the eval file is a question with an automatic checker:
 Add your OWN questions - the ones that matter for what you want to do.
 
 Results are saved to results/eval-<label>.json so you can compare models.
+Use --results-dir results/<machine> (or MM_RESULTS_DIR) to keep machines apart;
+--compare reads every results/**/eval-*.json and shows which folder each run is in.
 """
 import argparse
 import glob
@@ -119,8 +121,8 @@ def run(args) -> None:
           f"{sum(r['seconds'] for r in rows):.0f}s")
     print("  " + "  ".join(f"{c}: {sum(v)}/{len(v)}" for c, v in cats.items()))
 
-    os.makedirs(os.path.join(ROOT, "results"), exist_ok=True)
-    path = os.path.join(ROOT, "results", f"eval-{label}.json")
+    os.makedirs(args.results_dir, exist_ok=True)
+    path = os.path.join(args.results_dir, f"eval-{label}.json")
     json.dump({"label": label, "set": os.path.basename(args.set), "score": score,
                "n": len(rows), "think": args.think, "rows": rows,
                "date": time.strftime("%Y-%m-%d")}, open(path, "w"), indent=1)
@@ -128,7 +130,14 @@ def run(args) -> None:
 
 
 def compare() -> None:
-    runs = [json.load(open(p)) for p in sorted(glob.glob(os.path.join(ROOT, "results", "eval-*.json")))]
+    base = os.path.join(ROOT, "results")
+    runs = []
+    for p in sorted(glob.glob(os.path.join(base, "**", "eval-*.json"), recursive=True)):
+        run = json.load(open(p))
+        where = os.path.relpath(os.path.dirname(p), base)
+        if where != ".":
+            run["label"] = f"{run['label']} ({where})"
+        runs.append(run)
     if not runs:
         print("No saved runs yet.")
         return
@@ -154,6 +163,8 @@ def main() -> None:
     ap.add_argument("--reasoning-effort", choices=["low", "medium", "high"],
                     help="for gpt-oss style models (they always reason)")
     ap.add_argument("--compare", action="store_true", help="print a table of saved runs")
+    ap.add_argument("--results-dir", default=os.environ.get("MM_RESULTS_DIR", os.path.join(ROOT, "results")),
+                    help="where to save this run (default results/, or $MM_RESULTS_DIR)")
     a = ap.parse_args()
     compare() if a.compare else run(a)
 
